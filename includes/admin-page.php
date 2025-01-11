@@ -1,4 +1,5 @@
 <?php
+// File location: includes/admin-page.php
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -10,76 +11,55 @@ add_action('admin_menu', function () {
 
 function hyper_checkout_admin_page()
 {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'hyper_checkout_links';
-    $links = $wpdb->get_results("SELECT * FROM $table_name");
-
-    $products = get_posts(['post_type' => 'product', 'numberposts' => -1]);
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'hyper_checkout_nonce')) {
-            wp_die(__('Security check failed', 'hyper-checkout'));
-        }
-
-        // Insert new link
-        if (isset($_POST['create_hyper_link']) && isset($_POST['products'])) {
-            hc_handle_link_creation($_POST);
-        }
-
-        // Delete link
-        if (isset($_POST['delete_link'])) {
-            $link_id = intval($_POST['delete_link']);
-            $wpdb->delete($table_name, ['id' => $link_id], ['%d']);
-            wp_redirect(admin_url('admin.php?page=hyper-checkout&deleted=1'));
-            exit;
-        }
-    }
-
+    // Include the admin page template
     include plugin_dir_path(__FILE__) . '../views/admin-page.php';
 }
 
-function hc_handle_link_creation($data){
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'hyper_checkout_links';
+/**
+ * Handles the creation of a Hyper Checkout link via AJAX.
+ */
+add_action('wp_ajax_hcfw_create_link', 'hcfw_ajax_create_link');
+function hcfw_ajax_create_link()
+{
+    // Check nonce for security
+    check_ajax_referer('hcfw_nonce', 'security');
 
-    // Properly structure products array
-    $structured_products = hcTransformArray($data['products']);
+    // Validate required fields
+    if (!isset($_POST['link_name']) || !isset($_POST['products'])) {
+        wp_send_json_error(['message' => 'Missing required fields']);
+    }
 
-    $free_shipping = isset($data['free_shipping']) ? 1 : 0;
-    $logged_in_only = isset($data['logged_in_only']) ? 1 : 0;
-    $use_once = isset($data['use_once']) ? 1 : 0;
+    // Sanitize input
+    $link_name = sanitize_text_field($_POST['link_name']);
+    $free_shipping = isset($_POST['free_shipping']) ? 1 : 0;
+    $logged_in_only = isset($_POST['logged_in_only']) ? 1 : 0;
+    $use_once = isset($_POST['use_once']) ? 1 : 0;
     $link_hash = wp_generate_password(12, false);
 
-    $wpdb->insert($table_name, [
-        'link_hash' => $link_hash,
-        'products' => json_encode($structured_products), // Store structured array
-        'free_shipping' => $free_shipping,
-        'logged_in_only' => $logged_in_only,
-        'use_once' => $use_once,
-    ]);
+    // Properly structure products array
+    $structured_products = hcfwTransformArray($_POST['products']);
 
-    wp_redirect(admin_url('admin.php?page=hyper-checkout&success=1'));
-    exit;
+    // Insert or update the link using the new DB structure
+    hcfw_insert_or_update_link($link_name, $link_hash, $structured_products, get_current_user_id(), $free_shipping, $logged_in_only, $use_once);
+
+    // Return success response
+    return wp_send_json_success(['message' => 'Hyper Checkout Link created successfully!']);
 }
 
-function hcTransformArray($inputArray)
+/**
+ * Soft delete a link via AJAX.
+ */
+add_action('wp_ajax_hcfw_delete_link', 'hcfw_ajax_delete_link');
+function hcfw_ajax_delete_link()
 {
-    $result = [];
-    $temp = [];
+    check_ajax_referer('hcfw_nonce', 'security');
 
-    foreach ($inputArray as $item) {
-        foreach ($item as $key => $value) {
-            if ($key === 'id' && !empty($temp)) {
-                $result[] = $temp;
-                $temp = [];
-            }
-            $temp[$key] = $value;
-        }
+    if (!isset($_POST['delete_link']) || !$_POST['delete_link']) {
+        return wp_send_json_error(['message' => 'Invalid request']);
     }
 
-    if (!empty($temp)) {
-        $result[] = $temp;
-    }
+    $link_hash = sanitize_text_field($_POST['delete_link']);
+    hcfw_soft_delete_link($link_hash);
 
-    return $result;
+    return wp_send_json_success(['message' => 'Checkout link deleted successfully!']);
 }

@@ -21,7 +21,10 @@ button#add-product {
     cursor: pointer;
 }
 
-/* Modal Customization */
 .modal-content {
     border-radius: 10px;
+}
+
+.checkout-option {
+    border-radius: 20px;
 }
