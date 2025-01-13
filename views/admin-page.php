@@ -6,9 +6,9 @@ $links = hcfw_get_links();
 
 ?>
 
-<div class="container mt-4 rounded">
+<div class="container mt-2 rounded">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-black"><i class="fas fa-link"></i> Hyper Checkout Links</h2>
+        <h3 class="text-black"><i class="fas fa-link"></i> Hyper Checkout Links</h3>
         <button class="btn btn-primary bg-black" data-bs-toggle="modal" data-bs-target="#createLinkModal">
             <i class="fas fa-plus"></i> Create New Link
         </button>
@@ -29,18 +29,18 @@ $links = hcfw_get_links();
         </div>
     <?php endif; ?>
 
-    <div class="table-responsive rounded shadow-sm bg-white p-3">
+    <div class="table-responsive rounded shadow-sm bg-white p-1">
         <table class="table table-hover table-bordered rounded">
             <thead class="table-dark rounded">
                 <tr>
-                    <th>Name</th>
-                    <th>Link</th>
+                    <th class="small">Name</th>
+                    <th class="small">Link</th>
                     <!-- <th><i class="fas fa-shipping-fast"></i> Free Shipping</th> -->
                     <!-- <th><i class="fas fa-user-lock"></i> Logged In Only</th> -->
-                    <th><i class="fas fa-redo"></i> Use Once</th>
-                    <th><i class="fas fa-chart-line"></i> Used</th>
-                    <th>Created At</th>
-                    <th>Actions</th>
+                    <th class="small"><i class="fas fa-redo"></i> Use Once</th>
+                    <th class="small"><i class="fas fa-chart-line"></i> Used</th>
+                    <th class="small">Created At</th>
+                    <th class="small">Actions</th>
                 </tr>
             </thead>
             <tbody>

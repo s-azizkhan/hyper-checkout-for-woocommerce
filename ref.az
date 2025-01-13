@@ -1,6 +1,0 @@
-<td><span class="badge d-none <?= $link->config['free_shipping'] ? 'bg-success' : 'bg-secondary'; ?>"><?= $link->config['free_shipping'] ? 'Yes' : 'No'; ?></span></td>
-                        <td><span class="badge d-none <?= $link->config['logged_in_only'] ? 'bg-warning' : 'bg-secondary'; ?>"><?= $link->config['logged_in_only'] ? 'Yes' : 'No'; ?></span></td>
-                        <td><span class="badge <?= $link->config['use_once'] ? 'bg-danger' : 'bg-secondary'; ?>"><?= $link->config['use_once'] ? 'Yes' : 'No'; ?></span></td>
-
-
-                        
