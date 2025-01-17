@@ -4,7 +4,7 @@
     }
 
     // Fetch existing checkout links
-    $links = hcfw_get_links();
+    $links = HCFW_Helpers::get_links();
 
 ?>
 
@@ -14,7 +14,7 @@
             <h3 class="text-black"><i class="fas fa-link"></i> Hyper Checkout Links</h3>
             <p class="text-muted m-0">Sell More with Instant Checkout Links.</p>
         </div>
-        <button class="btn btn-primary bg-black" data-bs-toggle="modal" data-bs-target="#createLinkModal">
+        <button class="btn btn-primary bg-black m-2" data-bs-toggle="modal" data-bs-target="#createLinkModal">
             <i class="fas fa-plus"></i> Create New Link
         </button>
     </div>
