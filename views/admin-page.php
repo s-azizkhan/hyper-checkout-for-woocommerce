@@ -1,14 +1,19 @@
 <?php
-if (!defined('ABSPATH')) exit;
+    if (! defined('ABSPATH')) {
+        exit;
+    }
 
-// Fetch existing checkout links
-$links = hcfw_get_links();
+    // Fetch existing checkout links
+    $links = hcfw_get_links();
 
 ?>
 
-<div class="container mt-2 rounded">
+<div class="mt-2 rounded">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="text-black"><i class="fas fa-link"></i> Hyper Checkout Links</h3>
+        <div class="title">
+            <h3 class="text-black"><i class="fas fa-link"></i> Hyper Checkout Links</h3>
+            <p class="text-muted m-0">Sell More with Instant Checkout Links.</p>
+        </div>
         <button class="btn btn-primary bg-black" data-bs-toggle="modal" data-bs-target="#createLinkModal">
             <i class="fas fa-plus"></i> Create New Link
         </button>
@@ -46,23 +51,23 @@ $links = hcfw_get_links();
             <tbody>
                 <?php foreach ($links as $link): ?>
                     <tr>
-                        <td><?= esc_html($link->link_name); ?></td>
+                        <td><?php echo esc_html($link->link_name);?></td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <span class="hash-text" data-hash="<?= esc_attr($link->link_hash); ?>">
-                                    <?= esc_html($link->link_hash); ?>
+                                <span class="hash-text" data-hash="<?php echo esc_attr($link->link_hash);?>">
+                                    <?php echo esc_html($link->link_hash);?>
                                 </span>
-                                <button class="btn btn-sm btn-light ms-2 copy-btn" data-link="<?= esc_url(site_url('?' . HCFW_LINK_ID . '=' . $link->link_hash));?>" title="Copy Hash">
+                                <button class="btn btn-sm btn-light ms-2 copy-btn" data-link="<?php echo esc_url(site_url('?' . HCFW_LINK_ID . '=' . $link->link_hash));?>" title="Copy Hash">
                                     <i class="fas fa-copy"></i>
                                 </button>
                             </div>
                         </td>
                         <!-- TODO: implement those are hidden -->
-                        <td><span class="badge <?= $link->config['use_once'] ? 'bg-danger' : 'bg-secondary'; ?>"><?= $link->config['use_once'] ? 'Yes' : 'No'; ?></span></td>
-                        <td><span class="badge bg-dark"><?= esc_html($link->usage_count); ?></span></td>
-                        <td><?= esc_html($link->created_at); ?></td>
+                        <td><span class="badge <?php echo $link->config['use_once'] ? 'bg-danger' : 'bg-secondary';?>"><?php echo $link->config['use_once'] ? 'Yes' : 'No';?></span></td>
+                        <td><span class="badge bg-dark"><?php echo esc_html($link->usage_count);?></span></td>
+                        <td><?php echo esc_html($link->created_at);?></td>
                         <td>
-                            <button type="submit" class="btn btn-sm btn-danger delete-link" data-hash="<?= esc_attr($link->link_hash); ?>" title="Delete"><i class="fas fa-trash"></i></button>
+                            <button type="submit" class="btn btn-sm btn-danger delete-link" data-hash="<?php echo esc_attr($link->link_hash);?>" title="Delete"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -72,10 +77,9 @@ $links = hcfw_get_links();
 </div>
 
 <!-- Modal for Creating New Link -->
-<div class="modal fade" id="createLinkModal" tabindex="-1" aria-labelledby="createLinkModalLabel" aria-hidden="true">
+<div class="modal fade" id="createLinkModal" tabindex="-1" aria-labelledby="createLinkModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            
             <!-- Modal Header -->
             <div class="modal-header bg-primary bg-black text-white">
                 <h5 class="modal-title"><i class="fas fa-link"></i> Create Hyper Checkout Link</h5>
@@ -97,7 +101,7 @@ $links = hcfw_get_links();
                     <div class="mb-3">
                         <label class="fw-bold"><i class="fas fa-box"></i> Select Products</label>
                         <div id="products-container">
-                            
+
                         </div>
                         <button type="button" class="btn btn-outline-success btn-sm mt-2" id="add-product">
                             <i class="fas fa-plus-circle"></i> Add Another Product

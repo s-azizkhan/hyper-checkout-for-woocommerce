@@ -92,7 +92,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/checkout-handler.php';
 
 function hyper_checkout_enqueue_scripts($hook)
 {
-    if ($hook !== 'toplevel_page_hyper-checkout') {
+    if ($hook !== 'marketing_page_hyper-checkout') {
         return;
     }
     wp_enqueue_script('hyper-checkout-bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', ['jquery'], null, true);

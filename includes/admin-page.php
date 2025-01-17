@@ -6,7 +6,14 @@ if (!defined('ABSPATH')) {
 
 // Admin Menu
 add_action('admin_menu', function () {
-    add_menu_page('Hyper Checkout', 'Hyper Checkout', 'manage_options', 'hyper-checkout', 'hyper_checkout_admin_page');
+    add_submenu_page(
+        'woocommerce-marketing',      // Parent slug
+        'Hyper Checkout',             // Page title
+        'Hyper Checkout',             // Menu title
+        'manage_options',             // Capability
+        'hyper-checkout',             // Menu slug
+        'hyper_checkout_admin_page'   // Callback function
+    );
 });
 
 function hyper_checkout_admin_page()
